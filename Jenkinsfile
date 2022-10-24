@@ -23,11 +23,11 @@ pipeline {
       }
       stage('Docker Build&Push') {
             steps {
-              //withDockerRegistry(credentialsId: 'Docker', url: "") {
+              withDockerRegistry(credentialsId: 'Docker', url: "") {
               sh 'printenv'
               sh 'docker build -t issaouib/numeric-app:""$GIT_COMMIT"" .'
               sh 'docker push issaouib/numeric-app:""$GIT_COMMIT""'
-              //}
+              }
             }
       } 
   

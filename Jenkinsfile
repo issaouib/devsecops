@@ -9,8 +9,8 @@ pipeline {
             some-label: some-label-value
         spec:
           containers:
-          - name: maven
-            image: maven:alpine
+          - name: maven:alpine
+            image: maven:latest
             command:
             - cat
             tty: true
@@ -29,7 +29,9 @@ pipeline {
         }  
       stage('Unit Test -JUnit and Jacoco') {
             steps {
+              container('maven') {
               sh "mvn test"
+            }
             }
             post {
               always {
@@ -37,6 +39,7 @@ pipeline {
                 jacoco execPattern: 'target/jacoco.exec'
               }
             }
+            
       }        
   }    
 

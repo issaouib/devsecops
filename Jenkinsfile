@@ -20,14 +20,22 @@ pipeline {
               }
             }
       }
-      stage('SonarQube Analyzer') {
+      stage('SonarQube Analyses') {
             steps {
-              sh "mvn clean verify sonar:sonar \
+              withSonarQubeEnv('My SonarQube Server') {
+                sh "mvn clean verify sonar:sonar \
                   -Dsonar.projectKey=numeric-application \
                   -Dsonar.host.url=http://sonar.dev-ops.tn \
                   -Dsonar.login=sqp_8b599a0f51def7b1d7b56b65d0607ac8d31ca27f"
+              }
+              timeout(time: 1, unit: 'MINUTES') {
+                script {
+                  waitForQualityGate abortPipeline: true
+                }
             }
-        } 
+        }
+      }
+       
             
     }
 }

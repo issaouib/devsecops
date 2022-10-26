@@ -23,7 +23,7 @@ pipeline {
             steps {
               container('maven') {
               sh "mvn clean package -DskipTests=true"
-              //archive 'target/*.jar' //so that they can be downloaded later.
+              archive 'target/*.jar' //so that they can be downloaded later.
               }
             }
         }          

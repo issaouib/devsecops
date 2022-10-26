@@ -23,11 +23,8 @@ pipeline {
       stage('SonarQube Analyzer') {
             steps {
               
-              withSonarQubeEnv('SonarQube') {
-                mvn clean verify sonar:sonar \
-                -Dsonar.projectKey=numeric-application \
-                -Dsonar.host.url=http://sonar.dev-ops.tn \
-                -Dsonar.login=sqp_998a3de54eb5758821eaa4c3dcc32b7af1975fa1
+              withSonarQubeEnv('SonarQube'){
+                mvn clean verify sonar:sonar -Dsonar.projectKey=numeric-application -Dsonar.host.url=http://sonar.dev-ops.tn -Dsonar.login=sqp_998a3de54eb5758821eaa4c3dcc32b7af1975fa1
               }
 
             }

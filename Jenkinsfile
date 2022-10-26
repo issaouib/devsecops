@@ -1,37 +1,17 @@
 pipeline {
-  agent {
-    kubernetes {
-      yaml '''
-        apiVersion: v1
-        kind: Pod
-        metadata:
-          labels:
-            some-label: some-label-value
-        spec:
-          containers:
-          - name: maven:alpine
-            image: maven:latest
-            command:
-            - cat
-            tty: true
-        '''
-    }
-  }
+  agent any
 
   stages {
       stage('Build Artifact') {
             steps {
-              container('maven') {
               sh "mvn clean package -DskipTests=true"
               archive 'target/*.jar' //so that they can be downloaded later.
-              }
             }
-        }  
+        } 
+
       stage('Unit Test -JUnit and Jacoco') {
             steps {
-              container('maven') {
               sh "mvn test"
-            }
             }
             post {
               always {
@@ -39,8 +19,15 @@ pipeline {
                 jacoco execPattern: 'target/jacoco.exec'
               }
             }
+      }
+      stage('SonarQube Analyzer') {
+            steps {
+              sh "mvn clean verify sonar:sonar \
+                  -Dsonar.projectKey=numeric-application \
+                  -Dsonar.host.url=http://sonar.dev-ops.tn \
+                  -Dsonar.login=sqp_8b599a0f51def7b1d7b56b65d0607ac8d31ca27f"
+            }
+        } 
             
-      }        
-  }    
-
+    }
 }

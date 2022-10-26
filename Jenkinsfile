@@ -23,9 +23,11 @@ pipeline {
       stage('SonarQube Analyzer') {
             steps {
               
-              withSonarQubeEnv('SonarQube', envOnly: true) {
-  // This expands the evironment variables SONAR_CONFIG_NAME, SONAR_HOST_URL, SONAR_AUTH_TOKEN that can be used by any script.
-                println ${env.SONAR_HOST_URL} 
+              withSonarQubeEnv('SonarQube') {
+                mvn clean verify sonar:sonar \
+                -Dsonar.projectKey=numeric-application \
+                -Dsonar.host.url=http://sonar.dev-ops.tn \
+                -Dsonar.login=sqp_998a3de54eb5758821eaa4c3dcc32b7af1975fa1
               }
 
             }

@@ -22,31 +22,15 @@ pipeline {
       }
       stage('SonarQube Analyzer') {
             steps {
-              sh "mvn clean verify sonar:sonar \
-                  -Dsonar.projectKey=numeric-application \
-                  -Dsonar.host.url=http://sonar.dev-ops.tn \
-                  -Dsonar.login=sqp_8b599a0f51def7b1d7b56b65d0607ac8d31ca27f"
+              
+              withSonarQubeEnv('SonarQube', envOnly: true) {
+  // This expands the evironment variables SONAR_CONFIG_NAME, SONAR_HOST_URL, SONAR_AUTH_TOKEN that can be used by any script.
+                println ${env.SONAR_HOST_URL} 
+              }
+
             }
         } 
             
-      
-      stage('Docker Build&Push') {
-            steps {
-              withDockerRegistry(credentialsId: 'Docker', url: "") {
-              sh 'printenv'
-              sh 'docker build -t issaouib/numeric-app:""$GIT_COMMIT"" .'
-              sh 'docker push issaouib/numeric-app:""$GIT_COMMIT""'
-              }
-            }
-      }
+  }    
 
-      stage('kubernetes Deployments') {
-            steps {
-              withKubeConfig(credentialsId: 'kubernetes') {
-                sh "sed -i 's#replace#issaouib/numeric-app:${GIT_COMMIT}#g' k8s_deployment_service.yaml"
-                sh "kubectl apply -f k8s_deployment_service.yaml"
-              }
-           }
-      } 
-    }
 }

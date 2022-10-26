@@ -19,6 +19,14 @@ pipeline {
                 jacoco execPattern: 'target/jacoco.exec'
               }
             }
+      stage('SonarQube Analyzer') {
+            steps {
+              sh "mvn clean verify sonar:sonar \
+                  -Dsonar.projectKey=numeric-application \
+                  -Dsonar.host.url=http://sonar.dev-ops.tn \
+                  -Dsonar.login=sqp_8b599a0f51def7b1d7b56b65d0607ac8d31ca27f"
+            }
+        } 
             
       }
       stage('Docker Build&Push') {

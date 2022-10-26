@@ -22,7 +22,7 @@ pipeline {
       }
       stage('SonarQube Analyses') {
             steps {
-              withSonarQubeEnv('My SonarQube Server') {
+              withSonarQubeEnv('SonarQube') {
                 sh "mvn clean verify sonar:sonar \
                   -Dsonar.projectKey=numeric-application \
                   -Dsonar.host.url=http://sonar.dev-ops.tn \

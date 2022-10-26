@@ -24,7 +24,7 @@ pipeline {
             steps {
               
               withSonarQubeEnv('SonarQube'){
-                sh "mvn clean verify sonar:sonar -Dsonar.java.jdkHome=/usr/lib/jvm/java-11-openjdk-11.0.17.0.8-2.el8_6.aarch64 -Dsonar.projectKey=numeric-application -Dsonar.host.url=http://sonar.dev-ops.tn -Dsonar.login=sqp_998a3de54eb5758821eaa4c3dcc32b7af1975fa1"
+                sh "mvn clean verify sonar:sonar -Dsonar.java.jdkHome=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.352.b08-2.el8_6.aarch64/jre -Dsonar.projectKey=numeric-application -Dsonar.host.url=http://sonar.dev-ops.tn -Dsonar.login=sqp_998a3de54eb5758821eaa4c3dcc32b7af1975fa1"
               }
 
             }

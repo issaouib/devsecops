@@ -19,6 +19,7 @@ pipeline {
                 jacoco execPattern: 'target/jacoco.exec'
               }
             }
+      }
       stage('SonarQube Analyzer') {
             steps {
               sh "mvn clean verify sonar:sonar \
@@ -28,7 +29,7 @@ pipeline {
             }
         } 
             
-      }
+      
       stage('Docker Build&Push') {
             steps {
               withDockerRegistry(credentialsId: 'Docker', url: "") {

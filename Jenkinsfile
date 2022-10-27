@@ -20,7 +20,18 @@ pipeline {
               }
             }
       }
-      stage('SonarQube Analyses') {
+
+      stage('Mutation-Test-PIT') {
+            steps {
+              sh "mvn org.pitest:pitest-maven:mutationCoverage"
+            }
+            post {
+              always {
+                pitmutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
+              }
+            }
+      }
+      stage('SonarQube') {
             steps {
               withSonarQubeEnv('SonarQube') {
                 sh "mvn clean verify sonar:sonar \

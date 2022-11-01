@@ -31,6 +31,16 @@ pipeline {
             }
       }
       
+      stage('SonarQube') {
+            steps {
+                sh "mvn clean verify sonar:sonar \
+                  -Dsonar.projectKey=numeric-application \
+                  -Dsonar.host.url=http://sonar.dev-ops.tn \
+                  -Dsonar.login=sqp_c5c635031f7cfe44f7be12ca4e1c56ff8b1f76a8"
+ 
+        }
+      }
+      
       stage('Docker Build&Push') {
             steps {
               withDockerRegistry(credentialsId: 'Docker', url: "") {

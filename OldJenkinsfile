@@ -8,7 +8,6 @@ pipeline {
               archive 'target/*.jar' //so that they can be downloaded later.
             }
         } 
-
       stage('Unit Test -JUnit and Jacoco') {
             steps {
               sh "mvn test"
@@ -20,15 +19,6 @@ pipeline {
               }
             }
       }
-      stage('SonarQube Analyzer') {
-            steps {
-              sh "mvn clean verify sonar:sonar \
-                  -Dsonar.projectKey=numeric-application \
-                  -Dsonar.host.url=http://sonar.dev-ops.tn \
-                  -Dsonar.login=sqp_8b599a0f51def7b1d7b56b65d0607ac8d31ca27f"
-            }
-        } 
-            
       
       stage('Docker Build&Push') {
             steps {
@@ -39,7 +29,6 @@ pipeline {
               }
             }
       }
-
       stage('kubernetes Deployments') {
             steps {
               withKubeConfig(credentialsId: 'kubernetes') {
@@ -47,6 +36,6 @@ pipeline {
                 sh "kubectl apply -f k8s_deployment_service.yaml"
               }
            }
-      } 
-    }
+      }        
+   }
 }

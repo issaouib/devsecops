@@ -8,11 +8,11 @@ pipeline {
               archive 'target/*.jar' //so that they can be downloaded later.
             }
         } 
-
       stage('Unit Test -JUnit and Jacoco') {
             steps {
               sh "mvn test"
             }
+
       }
 
       stage('Mutation-Test-PIT') {
@@ -25,22 +25,23 @@ pipeline {
               }
             }
       }
+      
       stage('SonarQube') {
             steps {
               withSonarQubeEnv('SonarQube') {
                 sh "mvn clean verify sonar:sonar \
                   -Dsonar.projectKey=numeric-application \
-                  -Dsonar.host.url=http://sonar.dev-ops.tn \
-                  -Dsonar.login=sqp_239f49470e99e04d4ec8fa9c952871abfe51c2c1"
+                  -Dsonar.host.url=http://sonar.dev-ops.tn"
               }
-              timeout(time: 1, unit: 'MINUTES') {
+              timeout(time: 60, unit: 'MINUTES') {
                 script {
                   waitForQualityGate abortPipeline: true
-                }
-            }
+                  }
+                  }
+ 
         }
       }
-
+      
       stage('Vulnerability Scan - Docker') {
             steps {
               parallel(
@@ -58,7 +59,7 @@ pipeline {
               
             }
       }
-
+      
       stage('Docker Build&Push') {
             steps {
               withDockerRegistry(credentialsId: 'Docker', url: "") {
@@ -68,7 +69,6 @@ pipeline {
               }
             }
       }
-
       stage('kubernetes Deployments') {
             steps {
               withKubeConfig(credentialsId: 'kubernetes') {
@@ -76,9 +76,9 @@ pipeline {
                 sh "kubectl apply -f k8s_deployment_service.yaml"
               }
            }
-      }
-  }
-  post { 
+      }        
+   }
+     post { 
         always { 
             junit 'target/surefire-reports/*.xml'
             jacoco execPattern: 'target/jacoco.exec'
@@ -86,6 +86,4 @@ pipeline {
 
         }
   }        
-            
-  
 }

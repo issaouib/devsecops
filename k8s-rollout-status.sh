@@ -8,3 +8,4 @@ if [[ $(kubectl -n default rollout status deploy ${deploymentName} --timeout 5s)
     exit 1;
 else
     echo "Deployment ${deploymentName} Rollout is Success"
+fi

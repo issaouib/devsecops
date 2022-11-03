@@ -7,14 +7,14 @@ pipeline {
         sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy opa-k8s-security.rego k8s_deployment_service.yaml'
       }
     }
-  }
 
-  stage('kubernetes Deployments') {
+    stage('kubernetes Deployments') {
       steps {
         withKubeConfig(credentialsId: 'kubernetes') {
           sh "sed -i 's#replace#issaouib/numeric-app:${GIT_COMMIT}#g' k8s_deployment_service.yaml"
           sh "kubectl apply -f k8s_deployment_service.yaml"
         }
       }
-  }        
+    } 
+  }       
 }

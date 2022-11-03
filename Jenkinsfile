@@ -7,7 +7,7 @@ pipeline {
               sh "mvn clean package -DskipTests=true"
               archive 'target/*.jar' //so that they can be downloaded later.
             }
-        } 
+      } 
       stage('Unit Test -JUnit and Jacoco') {
             steps {
               sh "mvn test"
@@ -37,9 +37,8 @@ pipeline {
                 script {
                   waitForQualityGate abortPipeline: true
                   }
-                  }
- 
-        }
+              }
+           }
       }
       
       stage('Vulnerability Scan - Docker') {
@@ -69,21 +68,28 @@ pipeline {
               }
             }
       }
+
+      stage('Vulnerability Scan - k8s') {
+            steps {
+              sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy opa-k8s-security.rego k8s_deployment_service.yaml'
+            }
+      }
+
       stage('kubernetes Deployments') {
             steps {
               withKubeConfig(credentialsId: 'kubernetes') {
                 sh "sed -i 's#replace#issaouib/numeric-app:${GIT_COMMIT}#g' k8s_deployment_service.yaml"
                 sh "kubectl apply -f k8s_deployment_service.yaml"
               }
-           }
+            }
       }        
-   }
-     post { 
-        always { 
-            junit 'target/surefire-reports/*.xml'
-            jacoco execPattern: 'target/jacoco.exec'
-            dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+  }
+      post { 
+            always { 
+              junit 'target/surefire-reports/*.xml'
+              jacoco execPattern: 'target/jacoco.exec'
+              dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
 
-        }
-  }        
+            }
+      }        
 }

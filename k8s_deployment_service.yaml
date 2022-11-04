@@ -15,6 +15,9 @@ spec:
       labels:
         app: devsecops
     spec:
+      volumes:
+      - name: vol
+        emptyDir: {}
       serviceAccountName: default
       containers:
       - image: replace
@@ -23,6 +26,9 @@ spec:
           runAsNonRoot: true
           runAsUser: 100
           readOnlyRootFilesystem: true
+        volumeMounts:
+        - mountPath: /tmp
+          name: vol
 
 ---
 apiVersion: v1

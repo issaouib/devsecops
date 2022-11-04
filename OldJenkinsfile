@@ -8,13 +8,25 @@ pipeline {
               archive 'target/*.jar' //so that they can be downloaded later.
             }
       } 
+      stage('Unit Test -JUnit and Jacoco') {
+        steps {
+          sh "mvn test"
+        }
+
+  }
+
       stage('Vulnerability Scan - Docker') {
             steps {
                    sh "mvn dependency-check:check"
                 }
       }
+  }
+  post { 
+    always { 
+      junit 'target/surefire-reports/*.xml'
+      jacoco execPattern: 'target/jacoco.exec'
+      dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
 
-
-
-  }       
+    }
+}               
 }

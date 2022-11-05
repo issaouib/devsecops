@@ -111,7 +111,22 @@ pipeline {
             )
           }
       } 
-
+    stage('Integration Test') {
+        steps {
+          script {
+            try {
+              withKubeConfig(credentialsId: 'kubernetes') {
+                sh "bash integration-test.sh"
+              }
+            } catch (e) {
+                withKubeConfig(credentialsId: 'kubernetes') {
+                  sh "kubectl -n default rollout undo deploy ${deploymentName}"
+              } 
+              throw e
+            }
+          }
+        }
+    }
   }
       post { 
             always { 

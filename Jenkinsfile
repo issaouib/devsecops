@@ -1,3 +1,4 @@
+@Library('slack') _
 pipeline {
   agent any
 
@@ -133,6 +134,7 @@ pipeline {
               junit 'target/surefire-reports/*.xml'
               jacoco execPattern: 'target/jacoco.exec'
               dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+              sendNotification currentBuild.result
 
             }
       }        

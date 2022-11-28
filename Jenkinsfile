@@ -1,3 +1,4 @@
+@Library('slack') _
 pipeline {
   agent any
   environment {
@@ -11,7 +12,6 @@ pipeline {
   stages {
       stage('tchek latest docker image') {
         steps {
-          //sh 'imageName=$(cat /var/lib/jenkins/tag)'
           script {
             imageName = sh ( 
               script: 'cat /var/lib/jenkins/tag', returnStdout: true
@@ -39,5 +39,10 @@ pipeline {
       } 
     
   }
+  post { 
+    always { 
+      sendNotification currentBuild.result
+    }
+  }        
       
 }

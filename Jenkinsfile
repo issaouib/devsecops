@@ -3,8 +3,8 @@ pipeline {
   stages {
       stage('tchek latest docker image') {
         steps {
-          sh 'imageName=$(cat /var/lib/jenkins/tag)'
-          //def imageName = "echo ${imageName}"
+          //sh 'imageName=$(cat /var/lib/jenkins/tag)'
+          def imageName = "cat /var/lib/jenkins/tag"
         }
       }
       stage('kubernetes Deployments - Prod') {

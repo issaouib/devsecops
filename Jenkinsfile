@@ -41,7 +41,7 @@ pipeline {
   }
   post { 
     always { 
-      sendNotification currentBuild.result
+      sendNotificationprod currentBuild.result
     }
   }        
       

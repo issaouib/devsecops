@@ -9,7 +9,7 @@ pipeline {
               script: 'cat /var/lib/jenkins/tag', returnStdout: true
             ).trim()
           }
-          echo ${imageName}
+          echo "${imageName}"
         }
       }
       stage('kubernetes Deployments - Prod') {

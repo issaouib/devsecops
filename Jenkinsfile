@@ -5,8 +5,11 @@ pipeline {
         steps {
           //sh 'imageName=$(cat /var/lib/jenkins/tag)'
           script {
-          def imageName = "cat /var/lib/jenkins/tag"
+            imageName = sh ( 
+              script: 'cat /var/lib/jenkins/tag', returnStdout: true
+            ).trim()
           }
+          echo ${imageName}
         }
       }
       stage('kubernetes Deployments - Prod') {

@@ -1,15 +1,6 @@
-@Library('slack') _
+
 pipeline {
   agent any
-
-  environment {
-    deploymentName = "devsecops"
-    containerName = "devsecops-container"
-    serviceName = "devsecops-svc"
-    //imageName = "$(cat /var/lib/jenkins/tag)"
-    applicationURL = "http://myapp.dev-ops.tn"
-    applicationURI = "/increment/99"
-  }
 
   stages {
       stage('kubernetes Deployments - Prod') {

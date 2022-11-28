@@ -2,6 +2,11 @@ def imageName = "${cat /var/lib/jenkins/tag}"
 pipeline {
   agent any
   stages {
+      stage('tchek latest docker image') {
+        steps {
+            sh "imageName=$(cat /var/lib/jenkins/tag)"
+        }
+      }
       stage('kubernetes Deployments - Prod') {
           steps {
             parallel(

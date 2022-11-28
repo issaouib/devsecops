@@ -75,7 +75,7 @@ pipeline {
               sh 'printenv'
               sh 'sudo docker build -t issaouib/numeric-app:""$GIT_COMMIT"" .'
               sh 'docker push issaouib/numeric-app:""$GIT_COMMIT""'
-              sh 'echo issaouib/numeric-app:""$GIT_COMMIT"" > /root/tag '
+              sh 'echo issaouib/numeric-app:""$GIT_COMMIT"" > /var/lib/jenkins/tag '
               }
             }
       }

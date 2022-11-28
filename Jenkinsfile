@@ -1,4 +1,3 @@
-def imageName = "${cat /var/lib/jenkins/tag}"
 pipeline {
   agent any
   stages {

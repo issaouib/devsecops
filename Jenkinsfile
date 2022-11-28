@@ -6,7 +6,7 @@ pipeline {
     deploymentName = "devsecops"
     containerName = "devsecops-container"
     serviceName = "devsecops-svc"
-    //imageName = "issaouib/numeric-app:${GIT_COMMIT}"
+    imageName = "$(cat /var/lib/jenkins/tag)"
     applicationURL = "http://myapp.dev-ops.tn"
     applicationURI = "/increment/99"
   }
@@ -17,7 +17,7 @@ pipeline {
             parallel(
               "Deployment": {
                   withKubeConfig(credentialsId: 'kubernetes') {
-                    sh "imageName="$(cat /var/lib/jenkins/tag)""
+                    //sh "imageName="$(cat /var/lib/jenkins/tag)""
                     sh "sed -i 's#replace#${imageName}#g' k8s_prod_deployment_service.yaml"
                     sh "kubectl -n prod apply -f k8s_prod_deployment_service.yaml"
                   }

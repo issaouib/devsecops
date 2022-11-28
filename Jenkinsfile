@@ -1,4 +1,4 @@
-@Library('slack') _
+@Library('slack_prod') _
 pipeline {
   agent any
   environment {
